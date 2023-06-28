@@ -24,7 +24,10 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 import copy
 import tensorflow as tf
 import random
-
+from tensorflow import keras
+from tensorflow.keras import layers, models
+from keras.models import Sequential
+from keras.layers import Dense
 
 # Configuración de la página
 st.title('Cargando modelos')
