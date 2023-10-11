@@ -98,6 +98,7 @@ chart_data = pd.DataFrame(filtered_df, columns=['HoraEntrada', 'Anomaly Score', 
 
 print(chart_data)
 
+
 st.vega_lite_chart(chart_data, {
     'mark': {'type': 'circle', 'tooltip': True},
     'encoding': {

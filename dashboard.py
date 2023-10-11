@@ -23,7 +23,7 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import precision_score, recall_score, f1_score
 import copy
 import random
-
+import matplotlib.pyplot as plts
 
 # funciones xavi
 def generate_user_dict(operators_df):

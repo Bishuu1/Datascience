@@ -49,8 +49,8 @@ with st.spinner("Corriendo ANN."):
         'Normal': 'No fraud',
         'Anormal': 'Anomaly',
         'Muy Anormal': 'high Anomaly'
-
     }
+
     df['Fraude'] = df['Fraude'].replace(reemplazos)
 
     # Dividir los datos en características (X) y etiquetas (y)
@@ -58,6 +58,9 @@ with st.spinner("Corriendo ANN."):
     y = df['Fraude'].replace(['No fraud', 'Anomaly', 'high Anomaly'], [0, 1, 2]).astype(int)
 
     # Realizar cualquier transformación necesaria en los datos, como codificación de variables categóricas
+
+    # Dividir el conjunto de datos en entrenamiento y prueba
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # Crear y entrenar el modelo
     model = Sequential()
@@ -68,52 +71,36 @@ with st.spinner("Corriendo ANN."):
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Almacenar el historial de entrenamiento para graficar las métricas
-    history = model.fit(X, y, epochs=10, batch_size=32)
+    history = model.fit(X_train, y_train, epochs=5, batch_size=32, validation_data=(X_test, y_test))
 
-    # Hacer predicciones en nuevos datos
-    new_data = {
-        'Sucursal': [2466, 2466, 2466],
-        'UsuarioEntrada': [6918, 6918, 6918],
-        'HoraEntrada': [9, 10, 11],
-        'below_5': [9, 10, 11],
-        'between_5_and_30': [6, 3, 1],
-        'between_30_and_60': [9, 12, 6],
-        'between_60_and_90': [4, 3, 8],
-        'above_90': [2, 2, 1],
-        'Month': [3, 3, 3],
-        'MonthDay': [1, 1, 1],
-        'WeekDay': [9, 9, 9],
-        'transaction_1': [0, 0, 0],
-        'transaction_2': [0, 0, 0],
-        'transaction_3': [0, 0, 0]
-    }
+    # Hacer predicciones en el conjunto de prueba
+    predictions = model.predict(X_test)
 
-    new_data_df = pd.DataFrame(new_data)
+    # Obtener las etiquetas predichas en el conjunto de prueba
+    predicted_labels = predictions.argmax(axis=1)
+    true_labels = y_test.values
 
-    # Realizar las transformaciones necesarias en los datos nuevos, como codificar las variables categóricas si es necesario.
+    # Imprimir las etiquetas reales y predichas en el conjunto de prueba
+    for i in range(len(true_labels)):
+        print(f"Dato de prueba {i+1}: Etiqueta real: {true_labels[i]}, Etiqueta predicha: {predicted_labels[i]}")
 
-    predictions = model.predict(new_data_df)
+    # Calcular métricas de evaluación en el conjunto de prueba
+    precision = precision_score(y_test, predicted_labels, average='weighted', zero_division=1)
+    recall = recall_score(y_test, predicted_labels, average='weighted', zero_division=1)
+    f1 = f1_score(y_test, predicted_labels, average='weighted', zero_division=1)
 
-    predicted_labels = [label_mapping[idx] for idx in predictions.argmax(axis=1)]
-
-    # Imprimir las etiquetas predichas
-    for i, label in enumerate(predicted_labels):
-        print(f"Dato de entrada {i+1}: Etiqueta predicha: {label}")
-
-    # Calcular métricas de evaluación
-    precision = precision_score(y, model.predict(X).argmax(axis=1), average='weighted')
-    recall = recall_score(y, model.predict(X).argmax(axis=1), average='weighted')
-    f1 = f1_score(y, model.predict(X).argmax(axis=1), average='weighted')
-
-    print(f'Precisión: {precision:.4f}')
-    print(f'Recall: {recall:.4f}')
-    print(f'F1-score: {f1:.4f}')
+    print(f'Precisión en el conjunto de prueba: {precision:.4f}')
+    print(f'Recall en el conjunto de prueba: {recall:.4f}')
+    print(f'F1-score en el conjunto de prueba: {f1:.4f}')
 
     # Graficar la precisión, recall y F1-score a través de las épocas
     accuracy = history.history['accuracy']
+    val_accuracy = history.history['val_accuracy']
     loss = history.history['loss']
+    val_loss = history.history['val_loss']
     epochs = range(1, len(accuracy) + 1)
-    print(predictions)
+
 
 # Después de completar el entrenamiento:
 st.success('Listo!')
+

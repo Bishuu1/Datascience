@@ -54,8 +54,16 @@ with st.spinner("Corriendo RandomForest"):
     # Make predictions on the test set
     y_pred = rf.predict(X_test)
 
+    # Generate a classification report as a dictionary
+    report_dict = classification_report(y_test, y_pred, output_dict=True)
+
+    # Convert the dictionary to a DataFrame
+    report_df = pd.DataFrame(report_dict).transpose()
+
     # Generate a classification report
     print(classification_report(y_test, y_pred))
-
+    df = pd.DataFrame()
 # Después de completar el entrenamiento:
 st.success('Listo!')
+
+st.dataframe(report_df)
