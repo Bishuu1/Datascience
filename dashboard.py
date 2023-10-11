@@ -1,28 +1,33 @@
-import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
-import plotly.express as px
-import streamlit as st
+import copy
 import datetime
+import io
 import os
+import random
 import re
 import time
 from pathlib import Path
-from streamlit_extras.switch_page_button import switch_page
-from sklearn.ensemble import IsolationForest
-import io
-from sklearn import preprocessing, svm
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+
+import matplotlib.pyplot as plts
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
+from sklearn import preprocessing
+from sklearn import svm
 from sklearn.cluster import DBSCAN
-from sklearn.neighbors import NearestNeighbors
-from sklearn.neighbors import LocalOutlierFactor
-from sklearn.preprocessing import normalize
+from sklearn.ensemble import IsolationForest
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
-from sklearn.metrics import precision_score, recall_score, f1_score
-import copy
-import random
+from sklearn.metrics import f1_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import LocalOutlierFactor
+from sklearn.neighbors import NearestNeighbors
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import normalize
+from streamlit_extras.switch_page_button import switch_page
 
 
 # funciones xavi

@@ -31,10 +31,10 @@ from keras.layers import Dense
 
 #Configuración de la página
 st.title('Cargando modelos')
-st.header('Local Outliers Factor')
+st.header('AutoEncoder')
 
 
-with st.spinner("Corriendo LOF."):
+with st.spinner("Corriendo AE"):
     time.sleep(0.1)
     # Cargar los datos desde el archivo Excel
     data = pd.read_excel('datos_modificados.xlsx')
